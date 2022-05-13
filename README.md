@@ -21,8 +21,9 @@ It's very close to the benchmark of some libraries.
 
 But...
 
-When the app receive the data from server and create object with the value.
-Why the libs is so faster than origin JSONObject operate?
+* When the app receive the data from server and create object with the value.
+* Why the libs is so faster than origin JSONObject operate?
+
 I thought the result is not suitable the sense of the android platform.
 I run the benchmark with the oneshot mode:
 
@@ -34,5 +35,7 @@ EishayTest.jackson      ss    3  172943555.000 ± 5454871289.234  ns/op
 EishayTest.moshi        ss    3  120802500.000 ± 3805115227.327  ns/op
 EishayTest.origin       ss    3  114559912.667 ± 3612413251.738  ns/op
 ```
+
+`For one-time parsing, most libraries behave like your handwriting.`
 
 You can fork the project and run the benchmark which you care.
