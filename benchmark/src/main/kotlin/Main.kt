@@ -11,6 +11,7 @@ import org.openjdk.jmh.runner.options.Options
 import org.openjdk.jmh.runner.options.OptionsBuilder
 import java.util.concurrent.TimeUnit
 
+
 val globalMoshi: Moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
@@ -35,20 +36,12 @@ fun main(args: Array<String>) {
 
     println(content)
 
-    // one shot benchmark
-    val oneShotOptions: Options = OptionsBuilder()
-        .include(EishayTest::class.java.name)
-        .mode(Mode.SingleShotTime)
-        .timeUnit(TimeUnit.NANOSECONDS)
-        .forks(1)
-        .build()
-    Runner(oneShotOptions).run()
-
-    // throughput benchmark
+    // all benchmark
     val options: Options = OptionsBuilder()
         .include(EishayTest::class.java.name)
-        .mode(Mode.Throughput)
+        .mode(Mode.All)
         .timeUnit(TimeUnit.MILLISECONDS)
+        .measurementIterations(3)
         .forks(1)
         .build()
     Runner(options).run()
