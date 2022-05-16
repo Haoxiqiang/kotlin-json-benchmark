@@ -29,7 +29,7 @@ But...
 * Why the libs is so faster than origin JSONObject operate?
 
 I thought the result is not suitable the sense of the android platform.
-I run the benchmark with the oneshot mode:
+I run the benchmark with the diff mode:
 
 ```
 Benchmark                                 Mode      Cnt    Score    Error   Units
