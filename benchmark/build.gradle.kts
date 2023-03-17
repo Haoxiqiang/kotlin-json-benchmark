@@ -1,20 +1,20 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
-    kotlin("kapt") version "1.7.20"
+    kotlin("jvm") version "1.8.10"
+    kotlin("kapt") version "1.8.10"
     application
 }
 
 group = "org.kotlin.json"
-version = "1.2"
+version = "1.3"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    val kotlinVersion = "1.7.20"
+    val kotlinVersion = "1.8.10"
     implementation(kotlin("bom", version = kotlinVersion))
     testImplementation(kotlin("test", version = kotlinVersion))
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")

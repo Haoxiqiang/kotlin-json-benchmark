@@ -30,7 +30,7 @@ It's very close to the benchmark of some libraries.
 
 But...
 
-* When the app receive the data from server and create object with the value.
+* The app receive the data from server and create object with the value only once.
 * Why the libs is so faster than origin JSONObject operate?
 
 I thought the result is not suitable the sense of the android platform.
@@ -104,5 +104,7 @@ EishayTest.origin                           ss      3  193.982 ± 6122.227   ms/
 ```
 
 `For one-short parsing, most libraries behave like your handwriting.`
+
+My choice is that ordinary apps written in Java use the Gson, and those written in Kotlin use Moshi.
 
 You can fork the project and run the benchmark which you care.
