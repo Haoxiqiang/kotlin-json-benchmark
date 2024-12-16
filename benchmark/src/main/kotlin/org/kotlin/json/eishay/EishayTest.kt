@@ -1,6 +1,8 @@
 package org.kotlin.json.eishay
 
 import com.alibaba.fastjson.JSON
+import com.dslplatform.json.DslJson
+import com.dslplatform.json.runtime.Settings
 import content
 import globalGson
 import globalJackson
@@ -9,12 +11,7 @@ import org.json.JSONObject
 import org.kotlin.json.Eishay
 import org.kotlin.json.Image
 import org.kotlin.json.Media
-import org.openjdk.jmh.annotations.Benchmark
-import org.openjdk.jmh.annotations.Fork
-import org.openjdk.jmh.annotations.Measurement
-import org.openjdk.jmh.annotations.Scope
-import org.openjdk.jmh.annotations.State
-import org.openjdk.jmh.annotations.Warmup
+import org.openjdk.jmh.annotations.*
 import org.openjdk.jmh.infra.Blackhole
 import java.util.concurrent.TimeUnit
 
@@ -103,6 +100,17 @@ open class EishayTest {
             images = objList,
             media = mediaObj,
         )
+        bh.consume(obj)
+    }
+
+    @Benchmark
+    @Throws(Exception::class)
+    fun dslJson(bh: Blackhole) {
+        //include service loader will load up classes created via annotation processor
+        val settings = Settings.withRuntime<Any>()
+            .includeServiceLoader()
+        val dslJson = DslJson(settings)
+        val obj = dslJson.deserialize(Eishay::class.java, content.toByteArray(), content.length)
         bh.consume(obj)
     }
 }

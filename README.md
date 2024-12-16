@@ -8,22 +8,27 @@ There has been a puzzle around me for a long time.
 
 My project use the kotlin language, and I want to benchmark the performance of the JSON libraries.
 ```
-JMH version: 1.35
-VM version: JDK 18.0.1.1, OpenJDK 64-Bit Server VM, 18.0.1.1+2-6
-Kotlin version: 1.7.20
-jackson version: 2.14.0
-moshi version: 1.14.0
+# JMH version: 1.37
+# VM version: JDK 17.0.13, OpenJDK 64-Bit Server VM, 17.0.13+0
+# VM invoker: /opt/homebrew/Cellar/openjdk@17/17.0.13/libexec/openjdk.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Users/haoxiqiang/Applications/IntelliJ IDEA Community Edition.app/Contents/lib/idea_rt.jar=53634:/Users/haoxiqiang/Applications/IntelliJ IDEA Community Edition.app/Contents/bin -Dfile.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+Kotlin version: 1.9.25
+jackson version: 2.18.2
+moshi version: 1.15.2
 gson version: 2.10
 fastjson2 version: 2.0.21
+dsl-json version: 2.0.2
 ```
 
 ```
 Benchmark                                 Mode     Cnt    Score      Error   Units
-EishayTest.fastjson2                     thrpt      3  160.925 ± 2718.448  ops/ms
-EishayTest.gson                          thrpt      3  166.018 ± 2053.943  ops/ms
-EishayTest.jackson                       thrpt      3   72.280 ± 1111.439  ops/ms
-EishayTest.moshi                         thrpt      3  137.261 ± 1723.508  ops/ms
-EishayTest.origin                        thrpt      3   42.250 ±  467.543  ops/ms
+EishayTest.dslJson             thrpt      3   	11.936 ±   31.418  ops/ms
+EishayTest.fastjson2           thrpt      3  	664.035 ± 2378.379  ops/ms
+EishayTest.gson                thrpt      3  	656.478 ± 1244.248  ops/ms
+EishayTest.jackson             thrpt      3  	415.791 ± 1939.918  ops/ms
+EishayTest.moshi               thrpt      3  	444.553 ±  804.125  ops/ms
+EishayTest.origin              thrpt      3  	153.647 ±  235.919  ops/ms
 ```
 
 It's very close to the benchmark of some libraries.
@@ -37,70 +42,82 @@ I thought the result is not suitable the sense of the android platform.
 I run the benchmark with the diff mode:
 
 ```
-enchmark                                 Mode    Cnt    Score      Error   Units
-EishayTest.fastjson2                     thrpt      3  160.925 ± 2718.448  ops/ms
-EishayTest.gson                          thrpt      3  166.018 ± 2053.943  ops/ms
-EishayTest.jackson                       thrpt      3   72.280 ± 1111.439  ops/ms
-EishayTest.moshi                         thrpt      3  137.261 ± 1723.508  ops/ms
-EishayTest.origin                        thrpt      3   42.250 ±  467.543  ops/ms
+Benchmark                       Mode    Cnt    Score      Error   Units
+EishayTest.dslJson             thrpt      3   11.936 ±   31.418  ops/ms
+EishayTest.fastjson2           thrpt      3  664.035 ± 2378.379  ops/ms
+EishayTest.gson                thrpt      3  656.478 ± 1244.248  ops/ms
+EishayTest.jackson             thrpt      3  415.791 ± 1939.918  ops/ms
+EishayTest.moshi               thrpt      3  444.553 ±  804.125  ops/ms
+EishayTest.origin              thrpt      3  153.647 ±  235.919  ops/ms
 
-EishayTest.fastjson2                      avgt      3    0.017 ±    0.416   ms/op
-EishayTest.gson                           avgt      3    0.011 ±    0.220   ms/op
-EishayTest.jackson                        avgt      3    0.112 ±    3.234   ms/op
-EishayTest.moshi                          avgt      3    0.016 ±    0.327   ms/op
-EishayTest.origin                         avgt      3    0.031 ±    0.479   ms/op
+EishayTest.dslJson              avgt      3    0.082 ±    0.207   ms/op
+EishayTest.fastjson2            avgt      3    0.002 ±    0.008   ms/op
+EishayTest.gson                 avgt      3    0.002 ±    0.003   ms/op
+EishayTest.jackson              avgt      3    0.003 ±    0.013   ms/op
+EishayTest.moshi                avgt      3    0.002 ±    0.004   ms/op
+EishayTest.origin               avgt      3    0.007 ±    0.013   ms/op
 
-EishayTest.fastjson2                    sample  89589    0.014 ±    0.030   ms/op
-EishayTest.fastjson2:fastjson2·p0.00    sample           0.003              ms/op
-EishayTest.fastjson2:fastjson2·p0.50    sample           0.003              ms/op
-EishayTest.fastjson2:fastjson2·p0.90    sample           0.008              ms/op
-EishayTest.fastjson2:fastjson2·p0.95    sample           0.010              ms/op
-EishayTest.fastjson2:fastjson2·p0.99    sample           0.020              ms/op
-EishayTest.fastjson2:fastjson2·p0.999   sample           0.067              ms/op
-EishayTest.fastjson2:fastjson2·p0.9999  sample           0.244              ms/op
-EishayTest.fastjson2:fastjson2·p1.00    sample         825.229              ms/op
-EishayTest.gson                         sample  69383    0.016 ±    0.029   ms/op
-EishayTest.gson:gson·p0.00              sample           0.004              ms/op
-EishayTest.gson:gson·p0.50              sample           0.004              ms/op
-EishayTest.gson:gson·p0.90              sample           0.012              ms/op
-EishayTest.gson:gson·p0.95              sample           0.016              ms/op
-EishayTest.gson:gson·p0.99              sample           0.034              ms/op
-EishayTest.gson:gson·p0.999             sample           0.132              ms/op
-EishayTest.gson:gson·p0.9999            sample           2.192              ms/op
-EishayTest.gson:gson·p1.00              sample         606.077              ms/op
-EishayTest.jackson                      sample  60904    0.025 ±    0.041   ms/op
-EishayTest.jackson:jackson·p0.00        sample           0.008              ms/op
-EishayTest.jackson:jackson·p0.50        sample           0.008              ms/op
-EishayTest.jackson:jackson·p0.90        sample           0.026              ms/op
-EishayTest.jackson:jackson·p0.95        sample           0.034              ms/op
-EishayTest.jackson:jackson·p0.99        sample           0.052              ms/op
-EishayTest.jackson:jackson·p0.999       sample           0.171              ms/op
-EishayTest.jackson:jackson·p0.9999      sample           0.925              ms/op
-EishayTest.jackson:jackson·p1.00        sample         764.412              ms/op
-EishayTest.moshi                        sample  57246    0.019 ±    0.035   ms/op
-EishayTest.moshi:moshi·p0.00            sample           0.005              ms/op
-EishayTest.moshi:moshi·p0.50            sample           0.005              ms/op
-EishayTest.moshi:moshi·p0.90            sample           0.013              ms/op
-EishayTest.moshi:moshi·p0.95            sample           0.025              ms/op
-EishayTest.moshi:moshi·p0.99            sample           0.038              ms/op
-EishayTest.moshi:moshi·p0.999           sample           0.115              ms/op
-EishayTest.moshi:moshi·p0.9999          sample           1.975              ms/op
-EishayTest.moshi:moshi·p1.00            sample         615.514              ms/op
-EishayTest.origin                       sample  57079    0.031 ±    0.034   ms/op
-EishayTest.origin:origin·p0.00          sample           0.016              ms/op
-EishayTest.origin:origin·p0.50          sample           0.016              ms/op
-EishayTest.origin:origin·p0.90          sample           0.030              ms/op
-EishayTest.origin:origin·p0.95          sample           0.034              ms/op
-EishayTest.origin:origin·p0.99          sample           0.047              ms/op
-EishayTest.origin:origin·p0.999         sample           0.097              ms/op
-EishayTest.origin:origin·p0.9999        sample           0.258              ms/op
-EishayTest.origin:origin·p1.00          sample         585.105              ms/op
+EishayTest.dslJson            sample  36503    0.082 ±    0.010   ms/op
+EishayTest.dslJson:p0.00      sample           0.066              ms/op
+EishayTest.dslJson:p0.50      sample           0.073              ms/op
+EishayTest.dslJson:p0.90      sample           0.085              ms/op
+EishayTest.dslJson:p0.95      sample           0.093              ms/op
+EishayTest.dslJson:p0.99      sample           0.136              ms/op
+EishayTest.dslJson:p0.999     sample           0.432              ms/op
+EishayTest.dslJson:p0.9999    sample           9.131              ms/op
+EishayTest.dslJson:p1.00      sample         104.333              ms/op
+EishayTest.fastjson2          sample  76701    0.005 ±    0.012   ms/op
+EishayTest.fastjson2:p0.00    sample           0.001              ms/op
+EishayTest.fastjson2:p0.50    sample           0.001              ms/op
+EishayTest.fastjson2:p0.90    sample           0.002              ms/op
+EishayTest.fastjson2:p0.95    sample           0.002              ms/op
+EishayTest.fastjson2:p0.99    sample           0.005              ms/op
+EishayTest.fastjson2:p0.999   sample           0.034              ms/op
+EishayTest.fastjson2:p0.9999  sample           0.336              ms/op
+EishayTest.fastjson2:p1.00    sample         288.883              ms/op
+EishayTest.gson               sample  81036    0.003 ±    0.004   ms/op
+EishayTest.gson:p0.00         sample           0.001              ms/op
+EishayTest.gson:p0.50         sample           0.001              ms/op
+EishayTest.gson:p0.90         sample           0.002              ms/op
+EishayTest.gson:p0.95         sample           0.002              ms/op
+EishayTest.gson:p0.99         sample           0.004              ms/op
+EishayTest.gson:p0.999        sample           0.040              ms/op
+EishayTest.gson:p0.9999       sample           0.280              ms/op
+EishayTest.gson:p1.00         sample          92.799              ms/op
+EishayTest.jackson            sample  92451    0.006 ±    0.010   ms/op
+EishayTest.jackson:p0.00      sample           0.002              ms/op
+EishayTest.jackson:p0.50      sample           0.002              ms/op
+EishayTest.jackson:p0.90      sample           0.003              ms/op
+EishayTest.jackson:p0.95      sample           0.003              ms/op
+EishayTest.jackson:p0.99      sample           0.009              ms/op
+EishayTest.jackson:p0.999     sample           0.091              ms/op
+EishayTest.jackson:p0.9999    sample           0.547              ms/op
+EishayTest.jackson:p1.00      sample         287.834              ms/op
+EishayTest.moshi              sample  81468    0.004 ±    0.005   ms/op
+EishayTest.moshi:p0.00        sample           0.002              ms/op
+EishayTest.moshi:p0.50        sample           0.002              ms/op
+EishayTest.moshi:p0.90        sample           0.003              ms/op
+EishayTest.moshi:p0.95        sample           0.003              ms/op
+EishayTest.moshi:p0.99        sample           0.007              ms/op
+EishayTest.moshi:p0.999       sample           0.058              ms/op
+EishayTest.moshi:p0.9999      sample           0.650              ms/op
+EishayTest.moshi:p1.00        sample         112.067              ms/op
+EishayTest.origin             sample  72276    0.008 ±    0.004   ms/op
+EishayTest.origin:p0.00       sample           0.006              ms/op
+EishayTest.origin:p0.50       sample           0.006              ms/op
+EishayTest.origin:p0.90       sample           0.008              ms/op
+EishayTest.origin:p0.95       sample           0.008              ms/op
+EishayTest.origin:p0.99       sample           0.012              ms/op
+EishayTest.origin:p0.999      sample           0.044              ms/op
+EishayTest.origin:p0.9999     sample           1.020              ms/op
+EishayTest.origin:p1.00       sample          94.372              ms/op
 
-EishayTest.fastjson2                        ss      3  268.355 ± 8474.181   ms/op
-EishayTest.gson                             ss      3  197.297 ± 6226.390   ms/op
-EishayTest.jackson                          ss      3  256.122 ± 8078.626   ms/op
-EishayTest.moshi                            ss      3  212.561 ± 6703.983   ms/op
-EishayTest.origin                           ss      3  193.982 ± 6122.227   ms/op
+EishayTest.dslJson                ss      3   35.692 ± 1115.557   ms/op
+EishayTest.fastjson2              ss      3   91.235 ± 2880.543   ms/op
+EishayTest.gson                   ss      3   31.186 ±  982.993   ms/op
+EishayTest.jackson                ss      3   93.007 ± 2932.430   ms/op
+EishayTest.moshi                  ss      3   37.329 ± 1175.207   ms/op
+EishayTest.origin                 ss      3   28.856 ±  908.861   ms/op
 ```
 
 `For one-short parsing, most libraries behave like your handwriting.`

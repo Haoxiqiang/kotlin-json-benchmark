@@ -34,6 +34,7 @@ val content by lazy {
 
 fun main(args: Array<String>) {
 
+    println(args.joinToString())
     println(content)
 
     // all benchmark
